@@ -1,0 +1,22 @@
+\begin{table}[H]
+\centering
+\begin{tabular}{l|rr|rr}
+\toprule
+\textbf{Descripteur} & \multicolumn{2}{c}{\textbf{mAP@50}} & \multicolumn{2}{c}{\textbf{mAP@100}} \\
+ & \textbf{Marque} & \textbf{Marque + Modèle} & \textbf{Marque} & \textbf{Marque + Modèle} \\
+\midrule
+InceptionV4\_2\_steps\_data\_augmentation & 0.973 & 0.894 & 0.954 & 0.851 \\
+ResNet34\_2\_steps\_data\_augmentation & 0.949 & 0.802 & 0.914 & 0.753 \\
+ORB & 0.248 & 0.119 & 0.213 & 0.086 \\
+SIFT & 0.163 & 0.049 & 0.163 & 0.042 \\
+HOG & 0.146 & 0.037 & 0.138 & 0.028 \\
+Histogram\_Color & 0.142 & 0.034 & 0.136 & 0.027 \\
+Histogram\_HSV & 0.125 & 0.029 & 0.12 & 0.024 \\
+LBP & 0.079 & 0.016 & 0.081 & 0.015 \\
+GLCM & 0.11 & 0.011 & 0.102 & 0.009 \\
+ResNet34\_ImageNet & 0.076 & 0.004 & 0.08 & 0.004 \\
+\bottomrule
+\end{tabular}
+\caption{Benchmark des descripteurs}
+\label{tab:results}
+\end{table}

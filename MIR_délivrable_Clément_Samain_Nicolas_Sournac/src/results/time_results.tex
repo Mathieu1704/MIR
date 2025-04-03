@@ -1,0 +1,21 @@
+\begin{table}[H]
+\centering
+\begin{tabular}{l|cc}
+\toprule
+\textbf{Descripteur} & \textbf{Temps d'indexation (s)} & \textbf{Temps de recherche moyen (s)} \\
+\midrule
+InceptionV4\_2\_steps\_data\_augmentation & 11541.965 & 5.794($\pm$ 0.023) \\
+ResNet34\_2\_steps\_data\_augmentation & 1170.617 & 1.938($\pm$ 0.013) \\
+ResNet34\_ImageNet & 500.674 & 1.938($\pm$ 0.012) \\
+ORB & 94.203 & 62.16($\pm$ 0.096) \\
+SIFT & 504.087 & 338.608($\pm$ 170.674) \\
+HOG & 56.862 & 22.879($\pm$ 0.02) \\
+Histogram\_Color & 38.721 & 2.894($\pm$ 0.023) \\
+Histogram\_HSV & 42.039 & 2.593($\pm$ 0.033) \\
+LBP & 538.498 & 0.051($\pm$ 0.001) \\
+GLCM & 333.979 & 0.092($\pm$ 0.003) \\
+\bottomrule
+\end{tabular}
+\caption{Temps d'exécution des descripteurs}
+\label{tab:time_results}
+\end{table}

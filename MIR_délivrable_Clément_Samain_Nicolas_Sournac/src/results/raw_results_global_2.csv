@@ -1,0 +1,5 @@
+Feature_Extractor,Distance,k,brand_only,MAP
+ResNet34_ImageNet,Euclidienne,50,False,0.15077220944229638
+ResNet34_ImageNet,Euclidienne,50,True,0.27051954333869943
+ResNet34_ImageNet,Euclidienne,100,False,0.11704112489964431
+ResNet34_ImageNet,Euclidienne,100,True,0.2364908934767576
