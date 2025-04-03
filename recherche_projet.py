@@ -377,7 +377,7 @@ class Ui_MainWindow(object):
 
         if len(filenames)<1:
             print("Merci de charger une image avec le bouton Ouvrir") 
-            
+
         ##Charger les features de la base de données.
         self.features1 = []
         pas=0
@@ -498,6 +498,80 @@ class Ui_MainWindow(object):
         height = self.label_requete.frameGeometry().height() 
         self.label_courbe.setAlignment(QtCore.Qt.AlignCenter) 
         self.label_courbe.setPixmap(pixmap.scaled(width, height,QtCore.Qt.KeepAspectRatio,QtCore.Qt.SmoothTransformation))
+    
+
+    def afficherTop20Top50(self, MainWindow):
+        # Remise à 0 de la grille des voisins
+        for i in reversed(range(self.gridLayout.count())):
+            self.gridLayout.itemAt(i).widget().setParent(None)
+
+        voisins = ""
+
+        if self.algo_choice != 0:
+            # Générer les features de l'image requête
+            req = extractReqFeatures(fileName, self.algo_choice)
+            
+            # Définir le nombre de voisins à afficher
+            # Top 20
+            self.sortie = 20
+            voisins_20 = getkVoisins(self.features1, req, self.sortie, self.comboBox.currentText())  # Utilisation de la méthode choisie
+            
+            # Top 50
+            self.sortie = 50
+            voisins_50 = getkVoisins(self.features1, req, self.sortie, self.comboBox.currentText())  # Utilisation de la méthode choisie
+            
+            # Stocker les images et noms des voisins Top 20
+            self.path_image_top_20 = [voisins_20[k][0] for k in range(self.sortie)]
+            self.nom_image_top_20 = [os.path.basename(voisins_20[k][0]) for k in range(self.sortie)]
+            
+            # Stocker les images et noms des voisins Top 50
+            self.path_image_top_50 = [voisins_50[k][0] for k in range(self.sortie)]
+            self.nom_image_top_50 = [os.path.basename(voisins_50[k][0]) for k in range(self.sortie)]
+    
+        # Nombre de colonnes pour l'affichage
+        col = 3
+        k = 0
+
+        # Affichage des images pour le Top 20
+        for i in range(math.ceil(self.sortie / col)): 
+            for j in range(col):
+                img = cv2.imread(self.path_image_top_20[k], 1)  # Charger l'image
+                # Remise de l'image en RGB pour l'afficher correctement
+                b, g, r = cv2.split(img)  # Obtenir les canaux b, g, r
+                img = cv2.merge([r, g, b])  # Passer en RGB
+                # Convertir l'image en QImage
+                height, width, channel = img.shape 
+                bytesPerLine = 3 * width
+                qImg = QtGui.QImage(img.data, width, height, bytesPerLine, QtGui.QImage.Format_RGB888)
+                pixmap = QtGui.QPixmap.fromImage(qImg)
+                label = QtWidgets.QLabel("")
+                label.setAlignment(QtCore.Qt.AlignCenter)
+                label.setPixmap(pixmap.scaled(int(0.3 * width), int(0.3 * height), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+                self.gridLayout.addWidget(label, i, j)
+                k += 1
+
+        # Séparation avec un espace entre le Top 20 et Top 50
+        self.gridLayout.addWidget(QtWidgets.QLabel("Top 50"), i + 1, 0, 1, col)  # Titre pour le Top 50
+
+        # Affichage des images pour le Top 50
+        k = 0
+        for i in range(math.ceil(self.sortie / col)): 
+            for j in range(col):
+                img = cv2.imread(self.path_image_top_50[k], 1)  # Charger l'image
+                # Remise de l'image en RGB pour l'afficher correctement
+                b, g, r = cv2.split(img)  # Obtenir les canaux b, g, r
+                img = cv2.merge([r, g, b])  # Passer en RGB
+                # Convertir l'image en QImage
+                height, width, channel = img.shape 
+                bytesPerLine = 3 * width
+                qImg = QtGui.QImage(img.data, width, height, bytesPerLine, QtGui.QImage.Format_RGB888)
+                pixmap = QtGui.QPixmap.fromImage(qImg)
+                label = QtWidgets.QLabel("")
+                label.setAlignment(QtCore.Qt.AlignCenter)
+                label.setPixmap(pixmap.scaled(int(0.3 * width), int(0.3 * height), QtCore.Qt.KeepAspectRatio, QtCore.Qt.SmoothTransformation))
+                self.gridLayout.addWidget(label, i + 2, j)  # Ajouter après les images du Top 20
+                k += 1
+
 
 
 

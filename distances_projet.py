@@ -96,3 +96,4 @@ def getkVoisins(lfeatures, req, k,distanceName) :
     for i in range(k): 
         lvoisins.append(ldistances[i]) 
     return lvoisins
+
