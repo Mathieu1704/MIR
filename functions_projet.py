@@ -7,7 +7,8 @@ from skimage.feature import hog
 from skimage import exposure
 from skimage import io, color
 from matplotlib import pyplot as plt
-from skimage.feature import hog, local_binary_pattern
+from skimage.feature import hog, local_binary_pattern, graycomatrix, graycoprops
+from skimage.util import img_as_ubyte
 
 
 
@@ -20,7 +21,7 @@ def showDialog():
     returnValue = msgBox.exec()
 
 
-#HSV
+#1. HSV
 def generateHistogramme_HSV(filenames, progressBar):
     if not os.path.isdir("HSV"):
         os.mkdir("HSV")
@@ -41,7 +42,7 @@ def generateHistogramme_HSV(filenames, progressBar):
     print("indexation Hist HSV terminée !!!!")
 
 
-#BGR
+#2. BGR
 def generateHistogramme_Color(filenames, progressBar):
     if not os.path.isdir("BGR"):
         os.mkdir("BGR")
@@ -60,7 +61,7 @@ def generateHistogramme_Color(filenames, progressBar):
     print("indexation Hist Couleur terminée !!!!")
 
 
-#SIFT
+#3. SIFT
 def generateSIFT(filenames, progressBar):
     if not os.path.isdir("SIFT"):
         os.mkdir("SIFT")
@@ -80,7 +81,7 @@ def generateSIFT(filenames, progressBar):
     print("Indexation SIFT terminée !!!!")   
 
 
-#ORB
+#4. ORB
 def generateORB(filenames, progressBar):
     if not os.path.isdir("ORB"):
         os.mkdir("ORB")
@@ -95,6 +96,69 @@ def generateORB(filenames, progressBar):
         progressBar.setValue(100*((i+1)/len(os.listdir(filenames))))
         i+=1
     print("indexation ORB terminée !!!!")
+
+#5. GLCM
+def generateGLCM(filenames, progressBar):
+    if not os.path.isdir("GLCM"):
+        os.mkdir("GLCM")
+    
+    i = 0
+    properties = ['contrast', 'dissimilarity', 'homogeneity', 'energy', 'correlation', 'ASM']
+    
+    for path in os.listdir(filenames):
+        img = cv2.imread(filenames + "/" + path)
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        gray = img_as_ubyte(gray)  # Convertir en format 8 bits
+
+        distances = [1]
+        angles = [0, np.pi/4, np.pi/2, 3*np.pi/4]
+        glcm_matrix = graycomatrix(gray, distances=distances, angles=angles, symmetric=True, normed=True)
+
+        # Extraction des caractéristiques GLCM
+        features = []
+        for prop in properties:
+            features.append(graycoprops(glcm_matrix, prop).ravel())
+        
+        features = np.concatenate(features)  # Aplatir le tableau pour l'enregistrement
+
+        # Sauvegarde des descripteurs
+        num_image, _ = path.split(".")
+        np.savetxt(f"GLCM/{num_image}.txt", features)
+
+        # Mise à jour de la barre de progression
+        progressBar.setValue(100 * ((i + 1) / len(os.listdir(filenames))))
+        i += 1
+
+    print("Indexation GLCM terminée !!!!")
+
+#6. LBP
+def generateLBP(filenames, progressBar):
+    if not os.path.isdir("LBP"):
+        os.mkdir("LBP")
+
+    radius = 1
+    n_points = 8 * radius
+    method = 'uniform'
+
+    i = 0
+    for path in os.listdir(filenames):
+        img = cv2.imread(filenames + "/" + path)
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+        lbp = local_binary_pattern(gray, n_points, radius, method)
+
+        # On peut utiliser l'histogramme comme vecteur de descripteur
+        n_bins = int(lbp.max() + 1)
+        hist, _ = np.histogram(lbp.ravel(), bins=n_bins, range=(0, n_bins), density=True)
+
+        num_image, _ = path.split(".")
+        np.savetxt("LBP/" + str(num_image) + ".txt", hist)
+
+        progressBar.setValue(100 * ((i + 1) / len(os.listdir(filenames))))
+        i += 1
+
+    print("Indexation LBP terminée !!!!")
+    
     
 	
 def extractReqFeatures(fileName,algo_choice):  
