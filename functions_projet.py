@@ -189,6 +189,14 @@ def extractReqFeatures(fileName,algo_choice):
             orb = cv2.ORB_create()
             # finding key points and descriptors of both images using detectAndCompute() function
             key_point1,vect_features = orb.detectAndCompute(img,None)
+
+        elif algo_choice == 5:  # Appeler la fonction GLCM
+            vect_features = generateGLCM(fileName)  
+        
+        elif algo_choice == 6:  # Appeler la fonction LBP
+            vect_features = generateLBP(fileName)  
+
+        
 			
         np.savetxt("Methode_"+str(algo_choice)+"_requete.txt" ,vect_features)
         print("saved")
