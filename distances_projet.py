@@ -12,9 +12,15 @@ import operator
 import collections 
 from collections import Counter
 
+#1. Euclidienne
 def euclidean(l1, l2):
     return np.linalg.norm(np.array(l1) - np.array(l2))
 
+
+#2. Corrélation
+
+
+#3. Chi Charré
 def chiSquareDistance(l1, l2):
     s = 0.0
     for i,j in zip(l1,l2):
@@ -23,6 +29,7 @@ def chiSquareDistance(l1, l2):
         s += (i - j)**2 / (i + j)
     return s
 
+#4. Bhatta
 def bhatta(l1, l2):
     l1 = np.array(l1)
     l2 = np.array(l2)
@@ -31,6 +38,7 @@ def bhatta(l1, l2):
     return math.sqrt( 1 - num / den )
 
 
+#5. Flann
 def flann(a,b):
     a = np.float32(np.array(a))
     b = np.float32(np.array(b))
@@ -42,6 +50,8 @@ def flann(a,b):
     matches = list(map(lambda x: x.distance, flannMatcher.match(a, b)))
     return np.mean(matches)
 
+
+#6. Brute Force
 def bruteForceMatching(a, b):
     a = np.array(a).astype('uint8')
     b = np.array(b).astype('uint8')
