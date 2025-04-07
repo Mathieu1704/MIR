@@ -562,7 +562,7 @@ class Ui_MainWindow(object):
                 b, g, r = cv2.split(img)  # Obtenir les canaux b, g, r
                 img = cv2.merge([r, g, b])  # Passer en RGB
                 # Convertir l'image en QImage
-                height, width, channel = img.shape 
+                height, width, channel = img.shape
                 bytesPerLine = 3 * width
                 qImg = QtGui.QImage(img.data, width, height, bytesPerLine, QtGui.QImage.Format_RGB888)
                 pixmap = QtGui.QPixmap.fromImage(qImg)
